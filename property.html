@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property — AbodeKing Homes & Properties</title>
+<meta name="description" content="View full details for this verified property listing in Yola, Adamawa State.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="grain"></div>
+
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="brand">
+      <img src="/assets/logo.jpeg" alt="AbodeKing Logo" height="34" width="34" style="border-radius:50%; object-fit:cover; margin-right:10px;">
+      <span>
+        <span class="brand-name">Abode<em>King</em></span>
+        <span class="brand-sub">Homes &amp; Properties</span>
+      </span>
+    </a>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a href="listings.html">Listings</a>
+      <a href="list-property.html">List a Property</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="list-property.html" class="cta-btn">List Your Property</a>
+      <button class="mobile-toggle" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="breadcrumb-bar" id="breadcrumb">
+  <a href="index.html">Home</a> <span style="opacity:.4;">/</span> <a href="listings.html">Listings</a> <span style="opacity:.4;">/</span> <span id="crumb-title" style="opacity:.85; font-weight:700;">Loading…</span>
+</div>
+
+<div id="detail-root"></div>
+
+<div id="similar-root" class="detail-wrap" style="padding-top:0;"></div>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M20 30 L50 8 L80 30" fill="none" stroke="#F0A93E" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 55 L50 26 L88 55 V88 H12 Z" fill="#FBF7F0"/>
+      </svg>
+      AbodeKing Homes &amp; Properties
+    </div>
+    <div class="foot-links">
+      <a href="index.html">Home</a>
+      <a href="listings.html">Listings</a>
+      <a href="list-property.html">List a Property</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>We are NOT a government agency. We do NOT collect tax.</span>
+    <span>© 2026 AbodeKing Homes &amp; Properties · Proudly based in Yola, Adamawa State.</span>
+  </div>
+</footer>
+
+<script src="common.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = parseInt(params.get('id'), 10);
+const property = PROPERTIES.find(p => p.id === id);
+const root = document.getElementById('detail-root');
+const similarRoot = document.getElementById('similar-root');
+
+if(!property){
+  document.getElementById('crumb-title').textContent = 'Not found';
+  root.innerHTML = `
+    <div class="not-found">
+      <h1>We couldn't find that listing</h1>
+      <p>It may have been removed, or the link is out of date.</p>
+      <a href="listings.html" class="cta-btn" style="background:var(--orange);">Browse All Listings</a>
+    </div>
+  `;
+} else {
+  document.title = property.title + ' — AbodeKing Homes & Properties';
+  document.getElementById('crumb-title').textContent = property.title;
+
+  const d = property.details || {};
+  const purposeLabel = property.purpose === 'Sale' ? 'For Sale' : property.purpose === 'Rent' ? 'For Rent' : 'Nightly Stay';
+  const badge = property.verified
+    ? `<span class="badge-verified">✓ Verified</span>`
+    : `<span class="badge-pending">Pending Verification</span>`;
+
+  const specs = [];
+  if(property.beds) specs.push({ val: property.beds, lbl: 'Bedrooms' });
+  if(property.baths) specs.push({ val: property.baths, lbl: 'Bathrooms' });
+  if(!property.beds && !property.baths) specs.push({ val: d.plot_size_sqm ? d.plot_size_sqm + ' sqm' : '—', lbl: 'Land Parcel' });
+  specs.push({ val: property.type, lbl: 'Property Type' });
+  specs.push({ val: purposeLabel, lbl: 'Purpose' });
+
+  const enquirySubject = encodeURIComponent(`Enquiry: ${property.title}`);
+  const enquiryBody = encodeURIComponent(`Hello AbodeKing,\n\nI'm interested in "${property.title}" in ${property.location} (${property.priceLabel}). Please share more details.\n\nThanks.`);
+  const waText = encodeURIComponent(`Hi AbodeKing, I'm interested in "${property.title}" in ${property.location} (${property.priceLabel}). Please share more details.`);
+
+  // Renders a labeled fact list, skipping any null/undefined values automatically
+  function factGroup(title, pairs){
+    const rows = pairs.filter(([, v]) => v !== null && v !== undefined && v !== '');
+    if(!rows.length) return '';
+    return `
+      <div class="detail-desc" style="margin-top:22px;">
+        <h4>${title}</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 20px; font-size:14px;">
+          ${rows.map(([label, value]) => `<div style="padding:6px 0; border-bottom:1px dashed var(--line); display:flex; justify-content:space-between; gap:10px;"><span style="opacity:.6;">${label}</span><span style="font-weight:600; text-align:right;">${value}</span></div>`).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  const contactRows = property.type === 'Hotel'
+    ? [['Manager', d.manager_name], ['Manager Phone', d.manager_phone], ['Front Desk', d.frontdesk_phone], ['Email', d.contact_email]]
+    : [['Owner', d.owner_name], ['Phone', d.owner_phone], ['Email', d.owner_email]];
+
+  root.innerHTML = `
+    <div class="detail-wrap">
+      <div class="detail-grid">
+        <div>
+          <div class="detail-media">
+            ${mediaMarkup(property)}
+            <span class="badge-purpose">${purposeLabel}</span>
+            ${badge}
+          </div>
+          <h1 class="detail-title">${property.title}</h1>
+          <div class="detail-loc">📍 ${d.address ? d.address + ', ' : ''}${property.location}${d.landmark ? ' — ' + d.landmark : ''}</div>
+
+          <div class="spec-grid">
+            ${specs.map(s => `<div class="spec-item"><div class="val">${s.val}</div><div class="lbl">${s.lbl}</div></div>`).join('')}
+          </div>
+
+          <div class="detail-desc">
+            <h4>About this property</h4>
+            <p>${property.summary}</p>
+            ${d.special_features ? `<p style="margin-top:10px;"><strong>Special features:</strong> ${d.special_features}</p>` : ''}
+          </div>
+
+          ${factGroup('Property Details', [
+            ['Condition', d.overall_condition],
+            ['Furnished Status', d.furnished_status],
+            ['Year Built', d.year_built],
+            ['Floors', d.number_of_floors],
+            ['Toilets', d.toilets],
+            ['Store Rooms', d.store_rooms],
+            ['Plot Size', d.plot_size_sqm ? d.plot_size_sqm + ' sqm' : null]
+          ])}
+
+          ${factGroup('Utilities &amp; Security', [
+            ['Water Source', d.water_source],
+            ['Water Availability', d.water_availability_hours],
+            ['Power Source', d.power_source],
+            ['Power Availability', d.power_availability_hours],
+            ['Security', d.security_type],
+            ['Parking', d.parking_type],
+            ['Parking Capacity', d.parking_capacity]
+          ])}
+
+          ${factGroup('Nearby', [
+            ['Nearest Market', d.nearest_market],
+            ['Nearest School', d.nearest_school],
+            ['Nearest Hospital', d.nearest_hospital],
+            ['Major Road', d.nearest_major_road]
+          ])}
+
+          ${factGroup('Pricing', [
+            ['Payment Cycle', d.payment_cycle],
+            ['Service Charge', d.service_charge],
+            ['Agency Fee', d.agency_fee]
+          ])}
+        </div>
+
+        <div class="enquire-card">
+          <div class="price-big">${property.priceLabel}<small>${purposeLabel}</small></div>
+          <a class="cta-btn" style="background:var(--orange);" href="mailto:abodekinghp@gmail.com?subject=${enquirySubject}&body=${enquiryBody}">Enquire by Email</a>
+          <a class="cta-btn wa" href="https://wa.me/2349075160747?text=${waText}" target="_blank" rel="noopener">Chat on WhatsApp</a>
+          <a class="cta-btn ghost" href="tel:09075160747">Call 0907 516 0747</a>
+          <p class="enquire-note">${property.verified ? 'This listing has been visited and verified by our team.' : 'This listing is awaiting on-the-ground verification.'} We never share your contact details without your permission.</p>
+          ${factGroup('Listing Contact', contactRows)}
+          <p class="enquire-note" style="margin-top:14px; opacity:.5;">Listing ID: ${d.property_id || '—'} · Last verified: ${d.last_visit || 'Not yet visited'}</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Similar listings: same type, excluding current, capped at 3 — falls back to any other listings if too few matches
+  let similar = PROPERTIES.filter(p => p.id !== property.id && p.type === property.type);
+  if(similar.length < 3){
+    const extras = PROPERTIES.filter(p => p.id !== property.id && !similar.includes(p));
+    similar = similar.concat(extras).slice(0, 3);
+  }
+  if(similar.length){
+    similarRoot.innerHTML = `
+      <h2 class="similar-head">Similar Listings</h2>
+      <div class="grid">${similar.map(propertyCardHTML).join('')}</div>
+    `;
+  }
+}
+</script>
+</body>
+</html>

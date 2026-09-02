@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listings — AbodeKing Homes & Properties</title>
+<meta name="description" content="Search verified properties for sale, rent and nightly stay across Yola, Adamawa State.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="grain"></div>
+
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="brand">
+     <img src="/assets/logo.jpeg" alt="AbodeKing Logo" height="34" width="34" style="border-radius:50%; object-fit:cover; margin-right:10px;">
+      <span>
+        <span class="brand-name">Abode<em>King</em></span>
+        <span class="brand-sub">Homes &amp; Properties</span>
+      </span>
+    </a>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a href="listings.html" class="current">Listings</a>
+      <a href="list-property.html">List a Property</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="list-property.html" class="cta-btn">List Your Property</a>
+      <button class="mobile-toggle" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="crumb"><a href="index.html">Home</a> / Listings</div>
+    <h1>Every verified property, <span class="script">searchable</span> in seconds.</h1>
+    <p class="lead">Filter by purpose, type, location and price to find exactly what you're looking for in Yola.</p>
+  </div>
+</section>
+
+<div class="search-panel static">
+  <div class="panel-card">
+    <div class="field">
+      <label for="f-search">Search</label>
+      <input id="f-search" type="text" placeholder="Try 'duplex', 'Jimeta', 'guest house'…">
+    </div>
+    <div class="field">
+      <label for="f-purpose">Purpose</label>
+      <select id="f-purpose">
+        <option value="">Any</option>
+        <option value="Sale">For Sale</option>
+        <option value="Rent">For Rent</option>
+        <option value="Stay">Nightly Stay</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="f-type">Property Type</label>
+      <select id="f-type">
+        <option value="">Any</option>
+        <option value="House">House</option>
+        <option value="Land">Land</option>
+        <option value="Commercial">Commercial</option>
+        <option value="Hotel">Hotel / Guest House</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="f-location">Location</label>
+      <select id="f-location">
+        <option value="">Any</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Price Range (₦)</label>
+      <div class="price-row">
+        <input id="f-min" type="number" placeholder="Min" min="0">
+        <input id="f-max" type="number" placeholder="Max" min="0">
+      </div>
+    </div>
+    <button class="search-btn" id="f-reset">Reset</button>
+  </div>
+</div>
+
+<div class="tag-row">
+  <span class="label">Quick filter:</span>
+  <button class="chip active" data-quick="">All</button>
+  <button class="chip" data-quick="Sale">For Sale</button>
+  <button class="chip" data-quick="Rent">For Rent</button>
+  <button class="chip" data-quick="Stay">Guest House</button>
+  <button class="chip" data-quick="Land">Land</button>
+</div>
+
+<main class="results-wrap tight-top">
+  <div class="results-head">
+    <h2>Available Properties</h2>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="results-count" id="results-count">5 properties found</span>
+      <select class="sort-select" id="sort-select">
+        <option value="default">Sort: Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+      </select>
+    </div>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M20 30 L50 8 L80 30" fill="none" stroke="#F0A93E" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 55 L50 26 L88 55 V88 H12 Z" fill="#FBF7F0"/>
+      </svg>
+      AbodeKing Homes &amp; Properties
+    </div>
+    <div class="foot-links">
+      <a href="index.html">Home</a>
+      <a href="listings.html">Listings</a>
+      <a href="list-property.html">List a Property</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>We are NOT a government agency. We do NOT collect tax.</span>
+    <span>© 2026 AbodeKing Homes &amp; Properties · Proudly based in Yola, Adamawa State.</span>
+  </div>
+</footer>
+
+<script src="common.js"></script>
+<script>
+const grid = document.getElementById('grid');
+const resultsCount = document.getElementById('results-count');
+
+const els = {
+  search: document.getElementById('f-search'),
+  purpose: document.getElementById('f-purpose'),
+  type: document.getElementById('f-type'),
+  location: document.getElementById('f-location'),
+  min: document.getElementById('f-min'),
+  max: document.getElementById('f-max'),
+  sort: document.getElementById('sort-select'),
+  reset: document.getElementById('f-reset'),
+  chips: document.querySelectorAll('.chip')
+};
+
+[...new Set(PROPERTIES.map(p => p.location))].sort().forEach(loc => {
+  const opt = document.createElement('option');
+  opt.value = loc; opt.textContent = loc;
+  els.location.appendChild(opt);
+});
+
+let activeQuick = '';
+
+function render(list){
+  grid.innerHTML = '';
+  resultsCount.textContent = `${list.length} propert${list.length === 1 ? 'y' : 'ies'} found`;
+  if(list.length === 0){
+    grid.innerHTML = `<div class="empty-state"><b>No matches yet</b>Try widening your price range or clearing a filter.</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(propertyCardHTML).join('');
+}
+
+function applyFilters(){
+  const q = els.search.value.trim().toLowerCase();
+  const purpose = els.purpose.value;
+  const type = els.type.value;
+  const location = els.location.value;
+  const min = parseFloat(els.min.value) || 0;
+  const max = parseFloat(els.max.value) || Infinity;
+
+  let list = PROPERTIES.filter(p => {
+    const matchesQuery = !q || p.title.toLowerCase().includes(q) || p.location.toLowerCase().includes(q) || p.summary.toLowerCase().includes(q);
+    const matchesPurpose = !purpose || p.purpose === purpose;
+    const matchesType = !type || p.type === type;
+    const matchesLocation = !location || p.location === location;
+    const matchesPrice = p.price >= min && p.price <= max;
+    const matchesQuick = !activeQuick || p.purpose === activeQuick || p.type === activeQuick;
+    return matchesQuery && matchesPurpose && matchesType && matchesLocation && matchesPrice && matchesQuick;
+  });
+
+  if(els.sort.value === 'price-asc') list.sort((a,b) => a.price - b.price);
+  if(els.sort.value === 'price-desc') list.sort((a,b) => b.price - a.price);
+
+  render(list);
+}
+
+[els.search, els.purpose, els.type, els.location, els.min, els.max, els.sort].forEach(el => {
+  el.addEventListener('input', applyFilters);
+  el.addEventListener('change', applyFilters);
+});
+
+els.chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    els.chips.forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeQuick = chip.dataset.quick;
+    applyFilters();
+  });
+});
+
+els.reset.addEventListener('click', () => {
+  els.search.value = ''; els.purpose.value = ''; els.type.value = '';
+  els.location.value = ''; els.min.value = ''; els.max.value = ''; els.sort.value = 'default';
+  activeQuick = '';
+  els.chips.forEach(c => c.classList.remove('active'));
+  document.querySelector('.chip[data-quick=""]').classList.add('active');
+  applyFilters();
+});
+
+// Prefill from URL params (?q=&purpose=&type=&location=) coming from the homepage quick search
+(function prefillFromURL(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('q')) els.search.value = params.get('q');
+  if(params.get('purpose')) els.purpose.value = params.get('purpose');
+  if(params.get('type')) els.type.value = params.get('type');
+  if(params.get('location')) els.location.value = params.get('location');
+})();
+
+applyFilters();
+</script>
+</body>
+</html>

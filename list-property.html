@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>List a Property — AbodeKing Homes & Properties</title>
+<meta name="description" content="List your property, hotel or guest house free on AbodeKing — Yola's trusted, verified property directory.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="grain"></div>
+
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="brand">
+       <img src="/assets/logo.jpeg" alt="AbodeKing Logo" height="34" width="34" style="border-radius:50%; object-fit:cover; margin-right:10px;">
+      <span>
+        <span class="brand-name">Abode<em>King</em></span>
+        <span class="brand-sub">Homes &amp; Properties</span>
+      </span>
+    </a>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a href="listings.html">Listings</a>
+      <a href="list-property.html" class="current">List a Property</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="contact.html" class="cta-btn">Talk to Us</a>
+      <button class="mobile-toggle" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="crumb"><a href="index.html">Home</a> / List a Property</div>
+    <h1>We're building Yola's trusted property directory — <span class="script">help us help you.</span></h1>
+    <p class="lead">Give us a few minutes, give us your collaboration, and let's connect your property with the right people. Free. Verified. Reliable.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>A platform that works for you</h2>
+    <p>Whichever side of the market you're on, AbodeKing is built around getting you real, verified connections.</p>
+  </div>
+  <div class="audience-grid">
+    <div class="audience-card">
+      <span class="tag">Property Owners</span>
+      <h3>For Property Owners</h3>
+      <ul>
+        <li>Get real tenants</li>
+        <li>Free listing</li>
+        <li>Global visibility</li>
+        <li>Verified accuracy</li>
+        <li>You stay in control</li>
+        <li>Build trust</li>
+      </ul>
+    </div>
+    <div class="audience-card">
+      <span class="tag">Hotels &amp; Guest Houses</span>
+      <h3>For Hotels &amp; Guest Houses</h3>
+      <ul>
+        <li>More guests</li>
+        <li>Free listing</li>
+        <li>Verified location</li>
+        <li>Reach locals &amp; travelers</li>
+        <li>Build trust</li>
+      </ul>
+    </div>
+    <div class="audience-card">
+      <span class="tag">Agents &amp; Agencies</span>
+      <h3>For Agents &amp; Agencies</h3>
+      <ul>
+        <li>More listings</li>
+        <li>Wider exposure</li>
+        <li>Verified properties</li>
+        <li>Build your reputation</li>
+        <li>Grow your business</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="section-head">
+    <h2>Our promise to you</h2>
+    <p>At AbodeKing, we don't just list properties — we connect people with opportunities, build trust through verified information, and create a seamless property search experience.</p>
+  </div>
+  <div class="promise-row">
+    <div class="promise-item">
+      <div class="ico">📷</div>
+      <h4>Verified Photos</h4>
+      <p>We capture real exterior photos of your property before it goes live — no stock images, no guesswork.</p>
+    </div>
+    <div class="promise-item">
+      <div class="ico">🤝</div>
+      <h4>Owner Consent</h4>
+      <p>Nothing is listed without your explicit permission. You stay in control of what's shown and when.</p>
+    </div>
+    <div class="promise-item">
+      <div class="ico">📍</div>
+      <h4>Accurate Location</h4>
+      <p>Exact address or GPS location, confirmed on the ground — so genuine seekers can find you with confidence.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="section-head">
+    <h2>Tell us about your property</h2>
+    <p>Send us the details below and our team will visit to verify and photograph it before it goes live — completely free. Fields marked * are required.</p>
+  </div>
+  <form class="form-shell wide" id="list-form">
+
+    <div class="form-section">
+      <h4>Your Contact Details</h4>
+      <div class="form-grid">
+        <div class="field">
+          <label for="owner_name">Full Name *</label>
+          <input id="owner_name" name="owner_name" type="text" required placeholder="Your name">
+        </div>
+        <div class="field">
+          <label for="owner_phone">Phone Number *</label>
+          <input id="owner_phone" name="owner_phone" type="tel" required placeholder="080…">
+        </div>
+        <div class="field full">
+          <label for="owner_email">Email Address</label>
+          <input id="owner_email" name="owner_email" type="email" placeholder="you@email.com">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h4>Property Location</h4>
+      <div class="form-grid">
+        <div class="field">
+          <label for="property_category">Property Category *</label>
+          <select id="property_category" name="property_category" required>
+            <option value="">Select…</option>
+            <option>Residential</option>
+            <option>Commercial</option>
+            <option>Land</option>
+            <option>Hospitality</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="property_type">Property Type *</label>
+          <select id="property_type" name="property_type" required>
+            <option value="">Select…</option>
+            <option>Duplex</option>
+            <option>Bungalow</option>
+            <option>Flat / Apartment</option>
+            <option>Office Space</option>
+            <option>Shop / Warehouse</option>
+            <option>Residential Land</option>
+            <option>Hotel / Guest House</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label for="address">Address / Street *</label>
+          <input id="address" name="address" type="text" required placeholder="e.g. 12 Sardauna Crescent">
+        </div>
+        <div class="field">
+          <label for="neighborhood">Neighborhood *</label>
+          <input id="neighborhood" name="neighborhood" type="text" required placeholder="e.g. Jimeta GRA, Doubeli, Jambutu…">
+        </div>
+        <div class="field">
+          <label for="landmark">Nearby Landmark</label>
+          <input id="landmark" name="landmark" type="text" placeholder="e.g. Behind the State House of Assembly">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h4>Property Details</h4>
+      <div class="form-grid">
+        <div class="field">
+          <label for="bedrooms">Bedrooms</label>
+          <input id="bedrooms" name="bedrooms" type="number" min="0" placeholder="0">
+        </div>
+        <div class="field">
+          <label for="toilets">Toilets / Bathrooms</label>
+          <input id="toilets" name="toilets" type="number" min="0" placeholder="0">
+        </div>
+        <div class="field">
+          <label for="number_of_floors">Number of Floors</label>
+          <input id="number_of_floors" name="number_of_floors" type="number" min="0" placeholder="1">
+        </div>
+        <div class="field">
+          <label for="plot_size_sqm">Plot / Floor Size (sqm)</label>
+          <input id="plot_size_sqm" name="plot_size_sqm" type="number" min="0" placeholder="e.g. 400">
+        </div>
+        <div class="field">
+          <label for="year_built">Year Built</label>
+          <input id="year_built" name="year_built" type="number" min="1900" max="2026" placeholder="e.g. 2020">
+        </div>
+        <div class="field">
+          <label for="overall_condition">Overall Condition</label>
+          <select id="overall_condition" name="overall_condition">
+            <option value="">Select…</option>
+            <option>Excellent</option>
+            <option>Good</option>
+            <option>Fair</option>
+            <option>Needs Renovation</option>
+            <option>Vacant Land</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label for="furnished_status">Furnished Status</label>
+          <select id="furnished_status" name="furnished_status">
+            <option value="">Select…</option>
+            <option>Fully Furnished</option>
+            <option>Semi-Furnished</option>
+            <option>Unfurnished</option>
+            <option>Not Applicable</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h4>Utilities &amp; Security</h4>
+      <div class="form-grid">
+        <div class="field">
+          <label for="water_source">Water Source</label>
+          <input id="water_source" name="water_source" type="text" placeholder="e.g. Borehole">
+        </div>
+        <div class="field">
+          <label for="power_source">Power Source</label>
+          <input id="power_source" name="power_source" type="text" placeholder="e.g. PHCN + Generator">
+        </div>
+        <div class="field">
+          <label for="security_type">Security</label>
+          <input id="security_type" name="security_type" type="text" placeholder="e.g. Gated compound, guard">
+        </div>
+        <div class="field">
+          <label for="parking_type">Parking</label>
+          <input id="parking_type" name="parking_type" type="text" placeholder="e.g. Private compound">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h4>Pricing &amp; Availability</h4>
+      <div class="form-grid">
+        <div class="field">
+          <label for="ppurpose">Purpose *</label>
+          <select id="ppurpose" name="purpose" required>
+            <option value="">Select…</option>
+            <option>For Sale</option>
+            <option>For Rent</option>
+            <option>Nightly Stay</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="payment_cycle">Payment Cycle</label>
+          <select id="payment_cycle" name="payment_cycle">
+            <option value="">Select…</option>
+            <option>Outright</option>
+            <option>Annual</option>
+            <option>Monthly</option>
+            <option>Nightly</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="unit_price">Price (₦) *</label>
+          <input id="unit_price" name="unit_price" type="number" min="0" required placeholder="e.g. 1200000">
+        </div>
+        <div class="field">
+          <label for="service_charge">Service Charge (if any)</label>
+          <input id="service_charge" name="service_charge" type="text" placeholder="e.g. ₦150,000/year">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h4>Nearby (optional, helps seekers)</h4>
+      <div class="form-grid">
+        <div class="field">
+          <label for="nearest_market">Nearest Market</label>
+          <input id="nearest_market" name="nearest_market" type="text" placeholder="e.g. Jimeta Modern Market">
+        </div>
+        <div class="field">
+          <label for="nearest_school">Nearest School</label>
+          <input id="nearest_school" name="nearest_school" type="text" placeholder="e.g. AUN">
+        </div>
+        <div class="field">
+          <label for="nearest_hospital">Nearest Hospital</label>
+          <input id="nearest_hospital" name="nearest_hospital" type="text" placeholder="e.g. FMC Yola">
+        </div>
+        <div class="field">
+          <label for="nearest_major_road">Major Road</label>
+          <input id="nearest_major_road" name="nearest_major_road" type="text" placeholder="e.g. Numan Road">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h4>Description</h4>
+      <div class="form-grid">
+        <div class="field full">
+          <label for="property_description">Property Description</label>
+          <textarea id="property_description" name="property_description" rows="4" placeholder="Describe the property in your own words…"></textarea>
+        </div>
+        <div class="field full">
+          <label for="special_features">Special Features</label>
+          <input id="special_features" name="special_features" type="text" placeholder="e.g. Boys' quarters, fitted kitchen, tarred access road">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h4>Photos</h4>
+      <p class="hint">Real exterior and interior photos help your listing get verified faster — no stock images, please. Photos upload immediately when selected; the form only submits the resulting image link.</p>
+      <div class="form-grid">
+        <div class="field">
+          <label>Exterior Photo</label>
+          <div class="upload-field">
+            <div class="upload-btn" id="btn-exterior" onclick="openUploader('exterior')">📷 Click to upload exterior photo</div>
+            <img class="upload-preview" id="preview-exterior" alt="Exterior preview">
+            <input type="hidden" id="photo_exterior_1" name="photo_exterior_1">
+          </div>
+        </div>
+        <div class="field">
+          <label>Interior Photo</label>
+          <div class="upload-field">
+            <div class="upload-btn" id="btn-interior" onclick="openUploader('interior')">📷 Click to upload interior photo</div>
+            <img class="upload-preview" id="preview-interior" alt="Interior preview">
+            <input type="hidden" id="photo_interior_1" name="photo_interior_1">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section" style="border-bottom:none; margin-bottom:0; padding-bottom:0;">
+      <label class="checkbox-row">
+        <input type="checkbox" name="consent_confirmed" required>
+        <span>I confirm I am the owner or an authorized agent of this property, and I consent to AbodeKing visiting, verifying, and listing it on the platform.</span>
+      </label>
+    </div>
+
+    <!-- Auto-filled by JS on submit — not shown to the user -->
+    <input type="hidden" name="property_id">
+    <input type="hidden" name="timestamp">
+    <input type="hidden" name="data_source" value="Owner Submission">
+    <input type="hidden" name="verified_status" value="Pending Verification">
+
+    <button type="submit" class="cta-btn" style="background:var(--orange); margin-top:20px; width:100%; text-align:center; border:none;">Submit Property for Verification</button>
+    <p class="form-note">Our team will contact you to schedule a visit, confirm photos, and verify details before your listing goes live. This form is a demo — connect it to your backend or email us directly at <strong>abodekinghp@gmail.com</strong>.</p>
+  </form>
+</section>
+
+<div class="trust-strip">
+  <div class="foot-inner">
+    <span>🛡️ We are NOT government</span>
+    <span>🔒 Your data is safe</span>
+    <span>🤝 Community focused</span>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M20 30 L50 8 L80 30" fill="none" stroke="#F0A93E" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 55 L50 26 L88 55 V88 H12 Z" fill="#FBF7F0"/>
+      </svg>
+      AbodeKing Homes &amp; Properties
+    </div>
+    <div class="foot-links">
+      <a href="index.html">Home</a>
+      <a href="listings.html">Listings</a>
+      <a href="list-property.html">List a Property</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>We are NOT a government agency. We do NOT collect tax.</span>
+    <span>© 2026 AbodeKing Homes &amp; Properties · Proudly based in Yola, Adamawa State.</span>
+  </div>
+</footer>
+
+<!-- Cloudinary's browser upload widget — handles the actual file upload.
+     Sign up free at cloudinary.com, then replace the two placeholders below:
+       CLOUD_NAME    → found on your Cloudinary dashboard
+       UPLOAD_PRESET → create one under Settings → Upload → Upload presets,
+                        set its Signing Mode to "Unsigned" (required for
+                        direct browser uploads without a backend server) -->
+<script src="https://upload-widget.cloudinary.com/global/all.js"></script>
+<script src="common.js"></script>
+<script>
+const CLOUD_NAME = 'CLOUD_NAME';       // ← replace
+const UPLOAD_PRESET = 'UPLOAD_PRESET'; // ← replace
+
+function openUploader(fieldKey){
+  if(CLOUD_NAME === 'CLOUD_NAME'){
+    alert('Photo upload is not configured yet — set CLOUD_NAME and UPLOAD_PRESET in the script at the bottom of this page. See the comment above for how.');
+    return;
+  }
+  cloudinary.createUploadWidget({
+    cloudName: CLOUD_NAME,
+    uploadPreset: UPLOAD_PRESET,
+    sources: ['local', 'camera'],
+    multiple: false,
+    maxFileSize: 8000000, // 8MB
+    folder: 'abodeking-listings'
+  }, (error, result) => {
+    if(!error && result && result.event === 'success'){
+      const url = result.info.secure_url;
+      document.getElementById('photo_' + fieldKey + '_1').value = url;
+      const preview = document.getElementById('preview-' + fieldKey);
+      preview.src = url;
+      preview.classList.add('show');
+      document.getElementById('btn-' + fieldKey).textContent = '✓ Photo uploaded — click to replace';
+      document.getElementById('btn-' + fieldKey).classList.add('has-image');
+    }
+  }).open();
+}
+
+document.getElementById('list-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const form = e.target;
+  form.querySelector('[name="property_id"]').value = 'AK-' + new Date().getFullYear() + '-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+  form.querySelector('[name="timestamp"]').value = new Date().toISOString();
+  alert('Thanks! This demo form doesn\'t send data yet — connect it to your backend, or email abodekinghp@gmail.com directly. Photo links (if uploaded) are already captured in the hidden fields.');
+});
+</script>
+</body>
+</html>
