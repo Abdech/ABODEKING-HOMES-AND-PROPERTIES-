@@ -294,7 +294,7 @@ const PROPERTIES = [
     },
   },
   {
-    id: 1,
+    id: 6,
     title: "AUN Hotel",
     type: "Hotel",
     purpose: "Stay",
@@ -357,7 +357,7 @@ const PROPERTIES = [
   },
 
   {
-    id: 2,
+    id: 7,
     title: "5-Bedroom Furnished Bungalow",
     type: "House",
     purpose: "Sale",
@@ -419,7 +419,7 @@ const PROPERTIES = [
   },
 
   {
-    id: 3,
+    id: 8,
     title: "Commercial Office Complex",
     type: "Commercial",
     purpose: "Rent",
@@ -483,7 +483,7 @@ const PROPERTIES = [
   },
 
   {
-    id: 4,
+    id: 9,
     title: "Shagari Self-Contain Short Let",
     type: "House",
     purpose: "Stay",
@@ -539,7 +539,7 @@ const PROPERTIES = [
   },
 
   {
-    id: 5,
+    id: 10,
     title: "Sangere Estate Land",
     type: "Land",
     purpose: "Sale",
@@ -581,7 +581,7 @@ const PROPERTIES = [
   },
 
   {
-    id: 6,
+    id: 11,
     title: "Malkohi Estate Plot",
     type: "Land",
     purpose: "Sale",
@@ -621,7 +621,7 @@ const PROPERTIES = [
   },
 
   {
-    id: 7,
+    id: 12,
     title: "1-Bedroom Flat in Shagari Estate",
     type: "House",
     purpose: "Rent",
@@ -667,7 +667,7 @@ const PROPERTIES = [
   },
 
   {
-    id: 8,
+    id: 13,
     title: "3-Bedroom Duplex Apartment",
     type: "House",
     purpose: "Rent",
