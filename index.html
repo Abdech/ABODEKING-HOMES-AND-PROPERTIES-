@@ -61,7 +61,7 @@
           Adamawa State, and growing.
         </p>
         <div class="hero-stats">
-          <div class="stat"><b>5</b><span>Verified Listings</span></div>
+          <div class="stat"><b id="verified-count">0</b><span>Verified Listings</span></div>
           <div class="stat"><b>100%</b><span>Free to List</span></div>
           <div class="stat"><b>Yola</b><span>Adamawa State</span></div>
         </div>
@@ -280,5 +280,10 @@
           "listings.html" + (params.toString() ? "?" + params.toString() : "");
       });
     </script>
-  </body>
+  
+  <script>
+    const verifiedCount = PROPERTIES.filter((p) => p.verified).length;
+    document.getElementById("verified-count").textContent = verifiedCount;
+  </script>
+</body>
 </html>
