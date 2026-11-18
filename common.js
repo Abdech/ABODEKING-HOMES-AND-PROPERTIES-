@@ -1,753 +1,135 @@
 // =====================================================================
-// AbodeKing property dataset
-//
-// Each property has two layers:
-//   - top-level fields  → used by the cards/filters (unchanged shape,
-//     so listings.html / index.html keep working with no edits)
-//   - `details` object  → the fuller field-survey schema. Fields here
-//     split into what the OWNER supplies (via the List a Property form)
-//     and what the AbodeKing TEAM fills in after a verification visit.
-//     See list-property.html for the form that produces the "owner"
-//     half of this object.
+// AbodeKing listings — Supabase is the single source of truth.
+// Public page data is loaded from published rows only.
+// Owner contact fields are deliberately excluded from the public objects.
 // =====================================================================
 
-const PROPERTIES = [
-  {
-    id: 1,
-    title: "Modern 4-Bedroom Duplex with BQ",
-    type: "House",
-    purpose: "Sale",
-    location: "Jimeta GRA, Yola",
-    price: 85000000,
-    priceLabel: "₦85,000,000",
-    beds: 4,
-    baths: 5,
-    verified: true,
-    summary:
-      "Newly built duplex with a boys' quarters, gated compound and 24hr power backup, on a tarred street in GRA.",
-    details: {
-      property_id: "AK-2026-0001",
-      photo_exterior_1:
-        "https://images.timbu.com/hotels-ng/supplier_4i16vrz5wi_1_900x550.jpg",
-      address: "12 Sardauna Crescent",
-      street: "Sardauna Crescent",
-      neighborhood: "Jimeta GRA",
-      landmark: "Behind Adamawa State House of Assembly",
-      property_category: "Residential",
-      toilets: 5,
-      store_rooms: 1,
-      number_of_floors: 2,
-      year_built: 2023,
-      overall_condition: "Excellent",
-      furnished_status: "Unfurnished",
-      plot_size_sqm: 650,
-      water_source: "Borehole",
-      water_availability_hours: "24 hours",
-      power_source: "PHCN + Generator",
-      power_availability_hours: "18 hours",
-      security_type: "Gated Compound, Security Guard",
-      parking_type: "Private Compound",
-      parking_capacity: 4,
-      payment_cycle: "Outright",
-      service_charge: null,
-      agency_fee: "5% of sale price",
-      live_availability: true,
-      owner_name: "Alhaji Musa Ibrahim",
-      owner_phone: "0803 000 0001",
-      owner_email: "musa.ibrahim@example.com",
-      nearest_market: "Jimeta Modern Market (1.8km)",
-      nearest_school: "American University of Nigeria (2.5km)",
-      nearest_hospital: "Federal Medical Centre Yola (3km)",
-      nearest_major_road: "Numan Road",
-      special_features:
-        "Boys' quarters, fitted kitchen, en-suite bedrooms, tarred access road",
-      verified_status: "Verified",
-      data_source: "Site Visit",
-      timestamp: "2026-06-14",
-      last_visit: "2026-08-02",
-    },
-  },
-  {
-    id: 2,
-    title: "Cozy 2-Bedroom Bungalow",
-    type: "House",
-    purpose: "Rent",
-    location: "Doubeli, Yola",
-    price: 1200000,
-    priceLabel: "₦1,200,000 / year",
-    beds: 2,
-    baths: 2,
-    verified: true,
-    summary:
-      "Quiet family bungalow close to schools and markets, fully tiled with a fenced compound and borehole.",
-    details: {
-      property_id: "AK-2026-0002",
-      photo_exterior_1:
-        "https://images.pexels.com/photos/34432716/pexels-photo-34432716.jpeg",
-      address: "7 Bekaji Street",
-      street: "Bekaji Street",
-      neighborhood: "Doubeli",
-      landmark: "Near Doubeli Primary School",
-      property_category: "Residential",
-      toilets: 2,
-      store_rooms: 1,
-      number_of_floors: 1,
-      year_built: 2018,
-      overall_condition: "Good",
-      furnished_status: "Unfurnished",
-      plot_size_sqm: 400,
-      water_source: "Borehole",
-      water_availability_hours: "24 hours",
-      power_source: "PHCN",
-      power_availability_hours: "14 hours",
-      security_type: "Fenced Compound",
-      parking_type: "Open Yard",
-      parking_capacity: 2,
-      payment_cycle: "Annual",
-      service_charge: null,
-      agency_fee: "10% of one year's rent",
-      live_availability: true,
-      owner_name: "Mrs. Halima Yusuf",
-      owner_phone: "0806 000 0002",
-      owner_email: null,
-      nearest_market: "Doubeli Market (600m)",
-      nearest_school: "Doubeli Primary School (300m)",
-      nearest_hospital: "Yola Specialist Hospital (2.2km)",
-      nearest_major_road: "Bekaji Link Road",
-      special_features: "Fully tiled floors, fenced compound, close to schools",
-      verified_status: "Verified",
-      data_source: "Site Visit",
-      timestamp: "2026-05-30",
-      last_visit: "2026-07-19",
-    },
-  },
-  {
-    id: 3,
-    title: "Benue Riverside Guest House",
-    type: "Hotel",
-    purpose: "Stay",
-    location: "Jambutu, Yola",
-    price: 25000,
-    priceLabel: "₦25,000 / night",
-    beds: 12,
-    baths: 12,
-    verified: true,
-    summary:
-      "12-room riverside guest house with AC, free WiFi and 24hr security — ideal for business and short stays.",
-    details: {
-      property_id: "AK-2026-0003",
-      photo_exterior_1:
-        "https://images.pexels.com/photos/36814806/pexels-photo-36814806.jpeg",
-      address: "3 Riverside Close",
-      street: "Riverside Close",
-      neighborhood: "Jambutu",
-      landmark: "Along the Benue River bank",
-      property_category: "Hospitality",
-      toilets: 12,
-      store_rooms: 2,
-      number_of_floors: 2,
-      year_built: 2020,
-      overall_condition: "Excellent",
-      furnished_status: "Fully Furnished",
-      plot_size_sqm: 1200,
-      water_source: "Borehole + Storage Tank",
-      water_availability_hours: "24 hours",
-      power_source: "PHCN + Generator + Inverter",
-      power_availability_hours: "24 hours",
-      security_type: "24hr Guard, CCTV",
-      parking_type: "Private Lot",
-      parking_capacity: 15,
-      payment_cycle: "Nightly",
-      service_charge: "10% service charge",
-      agency_fee: null,
-      live_availability: true,
-      owner_name: "Benue Riverside Ltd.",
-      owner_phone: null,
-      owner_email: null,
-      manager_name: "Emeka Obi",
-      manager_phone: "0810 000 0003",
-      frontdesk_name: "Front Desk",
-      frontdesk_phone: "0810 000 0004",
-      contact_website: null,
-      contact_email: "reservations@benueriverside.example.com",
-      nearest_market: "Jambutu Market (1km)",
-      nearest_school: null,
-      nearest_hospital: "General Hospital Yola (2.8km)",
-      nearest_major_road: "Bridge Road",
-      special_features:
-        "River view, free WiFi, air conditioning, in-house restaurant",
-      verified_status: "Verified",
-      data_source: "Site Visit",
-      timestamp: "2026-04-10",
-      last_visit: "2026-08-15",
-    },
-  },
-  {
-    id: 4,
-    title: "Ground-Floor Commercial Office Space",
-    type: "Commercial",
-    purpose: "Rent",
-    location: "Yola Town",
-    price: 3500000,
-    priceLabel: "₦3,500,000 / year",
-    beds: 0,
-    baths: 2,
-    verified: true,
-    summary:
-      "180sqm open-plan office on a busy commercial corridor, with ample parking and dedicated transformer.",
-    details: {
-      property_id: "AK-2026-0004",
-      photo_exterior_1: "assets/GROUND FLOOR BEKAJI .png",
+let PROPERTIES = [];
 
-      // "https://images.timbu.com/hotels-ng/supplier_4i16vrz5wi_2_900x550.jpg",
-      address: "22 Bekaji-Karewa Road",
-      street: "Bekaji-Karewa Road",
-      neighborhood: "Yola Town",
-      landmark: "Opposite First Bank Yola Town Branch",
-      property_category: "Commercial",
-      toilets: 2,
-      store_rooms: 1,
-      number_of_floors: 1,
-      year_built: 2016,
-      overall_condition: "Good",
-      furnished_status: "Unfurnished",
-      plot_size_sqm: 180,
-      water_source: "Borehole",
-      water_availability_hours: "24 hours",
-      power_source: "PHCN + Dedicated Transformer",
-      power_availability_hours: "20 hours",
-      security_type: "Security Guard",
-      parking_type: "Frontage Parking",
-      parking_capacity: 10,
-      payment_cycle: "Annual",
-      service_charge: "₦150,000 / year",
-      agency_fee: "10% of one year's rent",
-      live_availability: true,
-      owner_name: "Yola Commercial Properties Ltd.",
-      owner_phone: "0813 000 0005",
-      owner_email: "info@yolacommercial.example.com",
-      nearest_market: "Yola Town Market (500m)",
-      nearest_school: null,
-      nearest_hospital: "Yola Specialist Hospital (1.5km)",
-      nearest_major_road: "Bekaji-Karewa Road",
-      special_features:
-        "Dedicated transformer, open-plan layout, high foot traffic corridor",
-      verified_status: "Verified",
-      data_source: "Site Visit",
-      timestamp: "2026-06-01",
-      last_visit: "2026-07-28",
-    },
-  },
-  {
-    id: 5,
-    title: "Prime Residential Land, Half Plot",
-    type: "Land",
-    purpose: "Sale",
-    location: "Yolde Pate, Yola",
-    price: 12000000,
-    priceLabel: "₦12,000,000",
-    beds: 0,
-    baths: 0,
-    verified: false,
-    summary:
-      "Fenced half-plot in a fast-developing layout, C of O in progress — good for immediate residential build.",
-    details: {
-      property_id: "AK-2026-0005",
-      photo_exterior_1:
-        "https://www.nairaland.com/attachments/15320709_img20220127114427713_jpeg3ce2f1b1c097bafb93f3c269b43195c1",
-      address: "Plot 45, Yolde Pate Layout",
-      street: "Yolde Pate Layout Extension",
-      neighborhood: "Yolde Pate",
-      landmark: "Near Yolde Pate Filling Station",
-      property_category: "Land",
-      toilets: null,
-      store_rooms: null,
-      number_of_floors: null,
-      year_built: null,
-      overall_condition: "Vacant Land",
-      furnished_status: null,
-      plot_size_sqm: 300,
-      water_source: null,
-      water_availability_hours: null,
-      power_source: "Nearby PHCN line",
-      power_availability_hours: null,
-      security_type: "Fenced Perimeter",
-      parking_type: null,
-      parking_capacity: null,
-      payment_cycle: "Outright",
-      service_charge: null,
-      agency_fee: "5% of sale price",
-      live_availability: true,
-      owner_name: "Alhaji Bello Adamu",
-      owner_phone: "0705 000 0006",
-      owner_email: null,
-      nearest_market: "Yolde Pate Market (900m)",
-      nearest_school: "Government Secondary School Yolde Pate (1.1km)",
-      nearest_hospital: "Primary Health Centre Yolde Pate (1.3km)",
-      nearest_major_road: "Yolde Pate Layout Road",
-      special_features:
-        "C of O in progress, fenced perimeter, dry-season accessible road",
-      verified_status: "Pending Verification",
-      data_source: "Owner Submission",
-      timestamp: "2026-08-20",
-      last_visit: null,
-    },
-  },
-  {
-    id: 6,
-    title: "AUN Hotel",
-    type: "Hotel",
-    purpose: "Stay",
-    location: "Abuja Road, Yola",
-    price: 55000,
-    priceLabel: "₦55,000  / night",
-    beds: 50,
-    baths: 18,
-    verified: true,
-    summary:
-      "Fully furnished hotel opposite Shafa Filling Station with 50 rooms, 24-hour water and power supply, and direct road access.",
-    details: {
-      property_id: "YLA-H2026-0002",
-      photo_exterior_1:
-        "https://tse2.mm.bing.net/th/id/OIP.yR-A3txBFrNIU-FBoZtmmgHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-      address: "AUN Hotel",
-      street: "Abuja Road",
-      neighborhood: "Shafa Filling Station",
-      landmark: "AUN ICT CENTER",
-      property_category: "Hotel",
-      property_type: "Hotel Room",
-      toilets: 18,
-      store_rooms: 15,
-      number_of_floors: 1,
-      year_built: 2012,
-      overall_condition: "Excellent",
-      furnished_status: "Fully Furnished",
-      water_source: "Borehole",
-      water_availability_hours: 24,
-      power_source: "Generator",
-      power_availability_hours: 24,
-      security_type: "Security Guards",
-      neighborhood_security: "Community Police",
-      parking_type: "Open Parking",
-      parking_capacity: "50+",
-      payment_cycle: "Daily",
-      service_charge: 0,
-      agency_fee: 0,
-      live_availability: "Comfortable",
-      owner_name: "N/A",
-      owner_phone: "N/A",
-      owner_email: "N/A",
-      manager_name: "Randy Egbodo",
-      manager_phone: "07043806585",
-      frontdesk_name: "Deborah Ajinomoh",
-      frontdesk_phone: "09037305151 / 08135224425",
-      contact_website: "www.aunhotel.com",
-      contact_email: "aunhotel@aunhotel.aun.edu.ng",
-      nearest_market: "Yola Market",
-      nearest_school: "Law School",
-      nearest_hospital: "Federal Medical Center",
-      nearest_major_road: "Abuja Road",
-      special_features: null,
-      property_description: "Opposite Shafa Filling Station",
-      verified_status: "Verified",
-      data_source: "Manager",
-      timestamp: "2026-09-02T16:59:20.890Z",
-      last_visit: null,
-    },
-  },
+const propertiesReady = (async function loadProperties() {
+  if (!window.supabase) {
+    throw new Error("Supabase client is not loaded. Check the Supabase script tag before common.js.");
+  }
 
-  {
-    id: 7,
-    title: "5-Bedroom Furnished Bungalow",
-    type: "House",
-    purpose: "Sale",
-    location: "Anguwan Sanda, Yola",
-    price: 50000000,
-    priceLabel: "₦50,000,000",
-    beds: 5,
-    baths: 7,
-    verified: true,
-    summary:
-      "Fully furnished 5-bedroom bungalow with cinema, solar power and spacious compound near Lamido Barkindo Aliyu Musdafa Academy.",
-    details: {
-      property_id: "YLA-S2026-0003",
-      photo_exterior_1:
-        "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/28/eb/8c/9d/caption.jpg?w=1200&h=-1&s=1",
-      address: "Anguwan Sanda",
-      street: "Abuja Road",
-      neighborhood: "Sanda Lodge",
-      landmark: "Adjacent to Lamido Barkindo Aliyu Musdafa Academy",
-      property_category: "For Sale",
-      property_type: "Bungalow",
-      toilets: 7,
-      store_rooms: 2,
-      number_of_floors: 1,
-      units_in_building: 1,
-      year_built: 2010,
-      overall_condition: "Good",
-      furnished_status: "Fully Furnished",
-      plot_size_sqm: 100,
-      water_source: "Tanker",
-      water_availability_hours: 24,
-      power_source: "Solar",
-      power_availability_hours: 24,
-      security_type: "Security Lights",
-      neighborhood_security: "Community Police",
-      parking_type: "Open Parking",
-      parking_capacity: "1-10",
-      payment_cycle: "One-off (buy)",
-      service_charge: 300,
-      agency_fee: 500,
-      live_availability: "Available",
-      owner_name: "Isa",
-      owner_phone: "0810000000",
-      owner_email: "isasaleh@gmail.com",
-      manager_name: "Isa",
-      manager_phone: "0810000000",
-      contact_email: "isasaleh@gmail.com",
-      nearest_market: "Yola Market",
-      nearest_school: "Lamido Barkindo Aliyu Musdafa Academy",
-      nearest_hospital: "Adamawa Hospital",
-      nearest_major_road: "Abuja Road",
-      special_features: "Cinema",
-      property_description: "Good",
-      verified_status: "Verified",
-      data_source: "Agent",
-      timestamp: "2026-08-31T23:31:59.735Z",
-      last_visit: null,
-    },
-  },
+  const { createClient } = window.supabase;
+  const db = createClient(
+    "https://bzwctfcavxhsxvxhpyie.supabase.co",
+    "sb_publishable_eJHODFHVtOJ-ApJC_P26SA_U70AoPsd"
+  );
 
-  {
-    id: 8,
-    title: "Commercial Office Complex",
-    type: "Commercial",
-    purpose: "Rent",
-    location: "Mayo, Yola",
-    price: 200000,
-    priceLabel: "₦200,000 / year",
-    beds: 0,
-    baths: 2,
-    verified: true,
-    summary:
-      "Office complex with six units, CCTV security and solar power, located near AUN and Yola Bypass.",
-    details: {
-      property_id: "YLA-R2026-0001",
-      photo_exterior_1:
-        "https://tse2.mm.bing.net/th/id/OIP.Xn_Da51zCOnwaejREP2g8QHaDp?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-      address: "No. 20 Mando, Mayo",
-      street: "Mando",
-      neighborhood: "Mayo",
-      landmark: "Abti",
-      property_category: "For Rent",
-      property_type: "Offices",
-      toilets: 2,
-      store_rooms: 0,
-      number_of_floors: 2,
-      units_in_building: 6,
-      year_built: 1996,
-      overall_condition: "Fair",
-      furnished_status: "Unfurnished",
-      water_source: "Well",
-      water_availability_hours: 10,
-      power_source: "Solar",
-      power_availability_hours: 10,
-      security_type: "CCTV",
-      neighborhood_security: "Community Police",
-      parking_type: "Open Parking",
-      parking_capacity: "11-50",
-      payment_cycle: "Annually",
-      service_charge: 10000,
-      agency_fee: 0,
-      live_availability: "Yes",
-      owner_name: "Mr. Okechuku",
-      owner_phone: "000000000",
-      owner_email: "afs@sd",
-      manager_name: "Mr. Ode",
-      manager_phone: "MMdd",
-      frontdesk_name: "Mr. Mo",
-      frontdesk_phone: "0000787878",
-      contact_website: "www.officeadupe.com",
-      contact_email: "adasda@mail",
-      nearest_market: "Yola Market",
-      nearest_school: "AUN",
-      nearest_hospital: "Multipurpose",
-      nearest_major_road: "Yola Bypass",
-      special_features: "Friendly neighborhood",
-      property_description: "A very nice Office unit",
-      verified_status: "Verified",
-      data_source: "Owner",
-      timestamp: "2026-08-15T15:48:51.963Z",
-      last_visit: "2026-06-01",
-    },
-  },
+  const { data, error } = await db
+    .from("listings")
+    .select("*")
+    .eq("publish_status", "published")
+    .order("id", { ascending: true });
 
-  {
-    id: 9,
-    title: "Shagari Self-Contain Short Let",
-    type: "House",
-    purpose: "Stay",
-    location: "Shagari Phase 1, Yola",
-    price: 150,
-    priceLabel: "₦150 / stay",
-    beds: 1,
-    baths: 1,
-    verified: true,
-    summary:
-      "Single self-contained unit in a family compound close to Yola Bypass and MAUTech Teaching Hospital.",
-    details: {
-      property_id: "YLA-SL2026-0001",
-      photo_exterior_1:
-        "https://tse2.mm.bing.net/th/id/OIP.KN_imTp71ft3m8xwFXyjiQHaFf?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-      address: "17 Donga Street",
-      street: "Donga Street, Shagari Phase 1",
-      neighborhood: "Shagari Phase 1",
-      landmark: "GDSS Shagari",
-      property_category: "Short-let",
-      property_type: "Self-Contain",
-      toilets: 1,
-      store_rooms: 0,
-      number_of_floors: 1,
-      year_built: 2020,
-      overall_condition: "Good",
-      furnished_status: "Unfurnished",
-      plot_size_sqm: 9,
-      water_source: "Borehole",
-      water_availability_hours: 4,
-      power_source: "National Grid",
-      power_availability_hours: 18,
-      security_type: "Security Lights",
-      neighborhood_security: "Community Police",
-      parking_type: "None",
-      parking_capacity: "0",
-      payment_cycle: "Annually",
-      service_charge: 3,
-      agency_fee: 10,
-      live_availability: "Available",
-      owner_name: "Abdulsamad Sadiq",
-      owner_phone: "08063193654",
-      owner_email: "Abdussamadsadiqabubakar@gmail.com",
-      nearest_market: "Yola Temporary Market",
-      nearest_school: "GDSS Shagari",
-      nearest_hospital: "Modibbo Adama University Teaching Hospital",
-      nearest_major_road: "Yola Bypass",
-      verified_status: "Verified",
-      data_source: "Owner",
-      timestamp: "2026-09-02T11:20:08.457Z",
-      last_visit: null,
-    },
-  },
+  if (error) throw error;
 
-  {
-    id: 10,
-    title: "Sangere Estate Land",
-    type: "Land",
-    purpose: "Sale",
-    location: "Sangere, Yola",
-    price: 350000,
-    priceLabel: "₦350,000",
-    beds: 0,
-    baths: 0,
-    verified: true,
-    summary:
-      "50x100 plot with flexible payment plan near Admiral Murtala Nyako Estate along Numan Road.",
-    details: {
-      property_id: "YLA-L2026-0001",
-      photo_exterior_1:
-        "https://tse1.explicit.bing.net/th/id/OIP.aRPO_E1LjOfthxJp8NZvmAHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-      address: "Sangere Kwanan Waya, Numan Road",
-      street: "Sangere Kwanan Waya",
-      neighborhood: "Sangere",
-      landmark: "Admiral Murtala Nyako Estate",
-      property_category: "Land",
-      property_type: "Estate",
-      plot_size_sqm: 464.5,
-      overall_condition: "Good",
-      payment_cycle: "Monthly",
-      owner_name: "Zazibel",
-      owner_phone: "08161130311",
-      manager_name: "Micheal Kute",
-      manager_phone: "08161130311",
-      frontdesk_name: "Daniel Sunday",
-      frontdesk_phone: "08144536241",
-      nearest_school: "Deeper Life High School",
-      nearest_major_road: "Numan Road",
-      special_features: "Undeveloped land",
-      verified_status: "Verified",
-      data_source: "Agent",
-      timestamp: "2026-09-03T07:19:39.662Z",
-      last_visit: null,
-    },
-  },
+  const privateFields = new Set([
+    "owner_name",
+    "owner_phone",
+    "owner_email",
+    "manager_name",
+    "manager_phone",
+    "frontdesk_name",
+    "frontdesk_phone",
+    "contact_email"
+  ]);
 
-  {
-    id: 11,
-    title: "Malkohi Estate Plot",
-    type: "Land",
-    purpose: "Sale",
-    location: "Malkohi, Yola",
-    price: 750000,
-    priceLabel: "₦750,000",
-    beds: 0,
-    baths: 0,
-    verified: true,
-    summary:
-      "Undeveloped estate plot behind Fintiri Homes with 40% initial deposit and balance spread over three months.",
-    details: {
-      property_id: "YLA-L2026-0001",
-      photo_exterior_1:
-        "https://tse4.mm.bing.net/th/id/OIP.F2AXZqTwsFwBwfDXlUN_cQHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-      address: "Malkohi, Behind Fintiri Homes",
-      street: "Malkohi",
-      neighborhood: "Malkohi",
-      landmark: "Fintiri Homes",
-      property_category: "Land",
-      property_type: "Estate",
-      plot_size_sqm: 50.1,
-      overall_condition: "Good",
-      payment_cycle: "Monthly",
-      owner_name: "Zazibel Integrated LTD",
-      owner_phone: "08161130311",
-      frontdesk_name: "Daniel Sunday",
-      frontdesk_phone: "08144536241",
-      nearest_school: "Federal Government Girls College, Yola",
-      nearest_major_road: "A13 Numan Road",
-      property_description: "Landed property, undeveloped",
-      verified_status: "Verified",
-      data_source: "Agent",
-      timestamp: "2026-09-03T07:45:11.398Z",
-      last_visit: null,
-    },
-  },
+  const topLevelFields = new Set([
+    "id",
+    "title",
+    "type",
+    "purpose",
+    "location",
+    "price",
+    "priceLabel",
+    "beds",
+    "baths",
+    "verified",
+    "summary",
+    "publish_status"
+  ]);
 
-  {
-    id: 12,
-    title: "1-Bedroom Flat in Shagari Estate",
-    type: "House",
-    purpose: "Rent",
-    location: "Shagari Housing Estate, Yola",
-    price: 350000,
-    priceLabel: "₦350,000 / year",
-    beds: 1,
-    baths: 1,
-    verified: false,
-    summary:
-      "Partially furnished one-bedroom flat with borehole water and parking space in Shagari Housing Estate.",
-    details: {
-      property_id: "YLA-R2026-0002",
-      photo_exterior_1:
-        "https://tse4.mm.bing.net/th/id/OIP.TiKIZM9HL2NW3zwZHv_RfgHaFj?r=0&w=576&h=432&rs=1&pid=ImgDetMain&o=7&rm=3",
-      address: "10 Donga Street",
-      street: "Donga Street, Shagari Phase 1",
-      neighborhood: "Shagari Housing Estate",
-      landmark: "GDSS Shagari",
-      property_category: "For Rent",
-      property_type: "Self-Contain",
-      toilets: 1,
-      store_rooms: 0,
-      number_of_floors: 1,
-      year_built: 2018,
-      overall_condition: "Good",
-      furnished_status: "Partially Furnished",
-      water_source: "Borehole",
-      water_availability_hours: 24,
-      power_source: "National Grid",
-      power_availability_hours: 6,
-      parking_type: "Open Parking",
-      parking_capacity: "1-10",
-      owner_name: "Usman Isa Marafa",
-      owner_phone: "09034799546",
-      manager_phone: "09168938790",
-      special_features: "Borehole water source",
-      verified_status: "Unverified",
-      data_source: "Owner",
-      timestamp: "2026-09-03T15:12:05.913Z",
-      last_visit: null,
-    },
-  },
+  PROPERTIES = (data || []).map((row) => {
+    const details = {};
 
-  {
-    id: 13,
-    title: "3-Bedroom Duplex Apartment",
-    type: "House",
-    purpose: "Rent",
-    location: "Shagari Housing Estate, Yola",
-    price: 1000000,
-    priceLabel: "₦1,000,000 / year",
-    beds: 2,
-    baths: 1,
-    verified: false,
-    summary:
-      "Partially furnished duplex apartment in excellent condition with ample parking and borehole water.",
-    details: {
-      property_id: "YLA-R2026-0003",
-      photo_exterior_1:
-        "https://tse3.mm.bing.net/th/id/OIP.k5rWRD1LZfy9l1a1VDYX2AHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-      address: "10 Donga Street",
-      street: "Shagari Phase 1",
-      neighborhood: "Shagari Housing Estate",
-      landmark: "GDSS Shagari",
-      property_category: "For Rent",
-      property_type: "Duplex",
-      toilets: 1,
-      store_rooms: 1,
-      number_of_floors: 1,
-      year_built: 2018,
-      overall_condition: "Excellent",
-      furnished_status: "Partially Furnished",
-      water_source: "Borehole",
-      water_availability_hours: 24,
-      power_source: "National Grid",
-      power_availability_hours: 6,
-      parking_type: "Open Parking",
-      parking_capacity: "1-10",
-      owner_name: "Usman Isa Marafa",
-      owner_phone: "09034799546",
-      manager_phone: "09168938790",
-      nearest_market: "Yola Temporary Market",
-      nearest_school: "GDSS Shagari",
-      nearest_hospital: "Modibbo Adama University Teaching Hospital",
-      nearest_major_road: "Yola Bypass",
-      verified_status: "Unverified",
-      data_source: "Owner",
-      timestamp: "2026-09-03T15:20:31.574Z",
-      last_visit: null,
-    },
-  },
-];
+    for (const [key, value] of Object.entries(row)) {
+      if (!topLevelFields.has(key) && !privateFields.has(key)) {
+        details[key] = value;
+      }
+    }
+
+    return {
+      id: Number(row.id),
+      title: row.title || "",
+      type: row.type || "",
+      purpose: row.purpose || "",
+      location: row.location || "",
+      price: row.price === null ? null : Number(row.price),
+      priceLabel: row.priceLabel || (
+        row.price == null
+          ? "Price on request"
+          : `₦${Number(row.price).toLocaleString("en-NG")}`
+      ),
+      beds: row.beds,
+      baths: row.baths,
+      verified: Boolean(row.verified),
+      summary: row.summary || "",
+      details
+    };
+  });
+
+  return PROPERTIES;
+})();
+
 
 // ===== Illustrated scenes (self-contained SVG, no external images/requests) =====
+
 const ILLUS_HOUSE = `<svg class="illus-bg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><rect width="400" height="220" fill="#14304F"/><circle cx="335" cy="45" r="30" fill="#F0A93E" opacity="0.85"/><path d="M0 175 L60 175 L60 120 L110 90 L160 120 L160 175 Z" fill="#0B1F35"/><rect x="80" y="140" width="24" height="35" fill="#FBF7F0"/><rect x="120" y="140" width="18" height="18" fill="#E8622C" opacity="0.8"/><path d="M150 175 L230 175 L230 100 L300 65 L370 100 L370 175 Z" fill="#1A3A5C"/><rect x="255" y="130" width="26" height="45" fill="#FBF7F0"/><rect x="290" y="125" width="20" height="20" fill="#F0A93E" opacity="0.7"/><rect x="320" y="125" width="20" height="20" fill="#F0A93E" opacity="0.7"/><rect x="0" y="175" width="400" height="45" fill="#0E2440"/><circle cx="30" cy="200" r="10" fill="#1F3D2B"/><rect x="27" y="185" width="6" height="18" fill="#1F3D2B"/></svg>`;
+
 const ILLUS_LAND = `<svg class="illus-bg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><rect width="400" height="220" fill="#1F3D2B"/><circle cx="345" cy="40" r="26" fill="#F0A93E" opacity="0.9"/><rect x="0" y="150" width="400" height="70" fill="#3E5A3E"/><path d="M0 150 L400 150" stroke="#FBF7F0" stroke-width="2" stroke-dasharray="10 8" opacity="0.6"/><g stroke="#0B1F35" stroke-width="4" opacity="0.7"><line x1="40" y1="150" x2="40" y2="120"/><line x1="150" y1="150" x2="150" y2="120"/><line x1="260" y1="150" x2="260" y2="120"/><line x1="360" y1="150" x2="360" y2="120"/></g><g fill="#0B1F35" opacity="0.7"><circle cx="40" cy="118" r="5"/><circle cx="150" cy="118" r="5"/><circle cx="260" cy="118" r="5"/><circle cx="360" cy="118" r="5"/></g></svg>`;
+
 const ILLUS_COMMERCIAL = `<svg class="illus-bg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><rect width="400" height="220" fill="#3A2E17"/><rect x="90" y="40" width="220" height="180" fill="#5A4A2E"/><g fill="#F0A93E" opacity="0.85"><rect x="115" y="65" width="26" height="26"/><rect x="160" y="65" width="26" height="26"/><rect x="205" y="65" width="26" height="26"/><rect x="250" y="65" width="26" height="26"/><rect x="115" y="105" width="26" height="26"/><rect x="160" y="105" width="26" height="26"/><rect x="205" y="105" width="26" height="26"/><rect x="250" y="105" width="26" height="26"/><rect x="115" y="145" width="26" height="26"/><rect x="205" y="145" width="26" height="26"/><rect x="250" y="145" width="26" height="26"/></g><rect x="160" y="150" width="40" height="65" fill="#0B1F35"/><rect x="90" y="30" width="220" height="12" fill="#E8622C"/></svg>`;
+
 const ILLUS_HOTEL = `<svg class="illus-bg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><rect width="400" height="220" fill="#7A3B10"/><rect x="120" y="20" width="170" height="200" fill="#B8611F"/><g fill="#FBF7F0" opacity="0.9"><rect x="140" y="40" width="18" height="18"/><rect x="175" y="40" width="18" height="18"/><rect x="210" y="40" width="18" height="18"/><rect x="245" y="40" width="18" height="18"/><rect x="140" y="75" width="18" height="18"/><rect x="175" y="75" width="18" height="18"/><rect x="210" y="75" width="18" height="18"/><rect x="245" y="75" width="18" height="18"/><rect x="140" y="110" width="18" height="18"/><rect x="175" y="110" width="18" height="18"/><rect x="210" y="110" width="18" height="18"/><rect x="245" y="110" width="18" height="18"/></g><rect x="180" y="160" width="50" height="60" fill="#0B1F35"/><rect x="60" y="150" width="10" height="70" fill="#1F3D2B"/><circle cx="65" cy="140" r="16" fill="#1F3D2B"/><rect x="330" y="150" width="10" height="70" fill="#1F3D2B"/><circle cx="335" cy="140" r="16" fill="#1F3D2B"/></svg>`;
+
 const ILLUS = {
   House: ILLUS_HOUSE,
   Land: ILLUS_LAND,
   Commercial: ILLUS_COMMERCIAL,
-  Hotel: ILLUS_HOTEL,
+  Hotel: ILLUS_HOTEL
 };
 
-// Renders the property's real photo if one was uploaded (details.photo_exterior_1
-// holds a URL — see the Cloudinary upload flow in list-property.html), otherwise
-// falls back to the illustrated scene. Card and detail page both call this so
-// there's one place that decides "do we have a real photo yet?"
+
+// Renders the property's real photo if one was uploaded.
+// Otherwise, it uses the illustrated fallback.
+
 function mediaMarkup(p) {
   const photoUrl = p.details && p.details.photo_exterior_1;
+
   if (photoUrl) {
     return `<img src="${photoUrl}" alt="${p.title}" loading="lazy">`;
   }
+
   return ILLUS[p.type] || ILLUS_HOUSE;
 }
+
 
 function propertyCardHTML(p) {
   const badge = p.verified
     ? `<span class="badge-verified">✓ Verified</span>`
     : `<span class="badge-pending">Pending Verification</span>`;
+
   const metaBits = [];
+
   if (p.beds) metaBits.push(`<span>🛏 ${p.beds} bed</span>`);
   if (p.baths) metaBits.push(`<span>🛁 ${p.baths} bath</span>`);
-  if (!p.beds && !p.baths) metaBits.push(`<span>📐 Land parcel</span>`);
+
+  if (!p.beds && !p.baths) {
+    metaBits.push(`<span>📐 Land parcel</span>`);
+  }
+
   const purposeLabel =
     p.purpose === "Sale"
       ? "For Sale"
@@ -773,10 +155,13 @@ function propertyCardHTML(p) {
   `;
 }
 
+
 function initMobileNav() {
   const btn = document.querySelector(".mobile-toggle");
   const nav = document.querySelector("nav.links");
+
   if (!btn || !nav) return;
+
   btn.addEventListener("click", () => nav.classList.toggle("open"));
 }
 
