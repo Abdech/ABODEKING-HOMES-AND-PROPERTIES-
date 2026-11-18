@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -120,9 +121,7 @@
       <div class="results-head">
         <h2>Available Properties</h2>
         <div style="display: flex; align-items: center; gap: 14px">
-          <span class="results-count" id="results-count"
-            >5 properties found</span
-          >
+          <span class="results-count" id="results-count">Loading properties...</span>
           <select class="sort-select" id="sort-select">
             <option value="default">Sort: Featured</option>
             <option value="price-asc">Price: Low to High</option>
@@ -158,133 +157,177 @@
       </div>
       <div class="foot-bottom">
         <span>We are NOT a government agency. We do NOT collect tax.</span>
-        <span
-          >© 2026 AbodeKing Homes &amp; Properties · Proudly based in Yola,
-          Adamawa State.</span
-        >
+        <span>
+          © 2026 AbodeKing Homes &amp; Properties · Proudly based in Yola,
+          Adamawa State.
+        </span>
       </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="common.js"></script>
+
     <script>
-      const grid = document.getElementById("grid");
-      const resultsCount = document.getElementById("results-count");
+      (async function () {
+        const grid = document.getElementById("grid");
+        const resultsCount = document.getElementById("results-count");
 
-      const els = {
-        search: document.getElementById("f-search"),
-        purpose: document.getElementById("f-purpose"),
-        type: document.getElementById("f-type"),
-        location: document.getElementById("f-location"),
-        min: document.getElementById("f-min"),
-        max: document.getElementById("f-max"),
-        sort: document.getElementById("sort-select"),
-        reset: document.getElementById("f-reset"),
-        chips: document.querySelectorAll(".chip"),
-      };
+        try {
+          // Wait for Supabase listings to finish loading.
+          await propertiesReady;
 
-      [...new Set(PROPERTIES.map((p) => p.location))].sort().forEach((loc) => {
-        const opt = document.createElement("option");
-        opt.value = loc;
-        opt.textContent = loc;
-        els.location.appendChild(opt);
-      });
+          const els = {
+            search: document.getElementById("f-search"),
+            purpose: document.getElementById("f-purpose"),
+            type: document.getElementById("f-type"),
+            location: document.getElementById("f-location"),
+            min: document.getElementById("f-min"),
+            max: document.getElementById("f-max"),
+            sort: document.getElementById("sort-select"),
+            reset: document.getElementById("f-reset"),
+            chips: document.querySelectorAll(".chip"),
+          };
 
-      let activeQuick = "";
+          // Populate locations from Supabase data.
+          [...new Set(PROPERTIES.map((p) => p.location))]
+            .filter(Boolean)
+            .sort()
+            .forEach((loc) => {
+              const opt = document.createElement("option");
+              opt.value = loc;
+              opt.textContent = loc;
+              els.location.appendChild(opt);
+            });
 
-      function render(list) {
-        grid.innerHTML = "";
-        resultsCount.textContent = `${list.length} propert${list.length === 1 ? "y" : "ies"} found`;
-        if (list.length === 0) {
-          grid.innerHTML = `<div class="empty-state"><b>No matches yet</b>Try widening your price range or clearing a filter.</div>`;
-          return;
-        }
-        grid.innerHTML = list.map(propertyCardHTML).join("");
-      }
+          let activeQuick = "";
 
-      function applyFilters() {
-        const q = els.search.value.trim().toLowerCase();
-        const purpose = els.purpose.value;
-        const type = els.type.value;
-        const location = els.location.value;
-        const min = parseFloat(els.min.value) || 0;
-        const max = parseFloat(els.max.value) || Infinity;
+          function render(list) {
+            grid.innerHTML = "";
 
-        let list = PROPERTIES.filter((p) => {
-          const matchesQuery =
-            !q ||
-            p.title.toLowerCase().includes(q) ||
-            p.location.toLowerCase().includes(q) ||
-            p.summary.toLowerCase().includes(q);
-          const matchesPurpose = !purpose || p.purpose === purpose;
-          const matchesType = !type || p.type === type;
-          const matchesLocation = !location || p.location === location;
-          const matchesPrice = p.price >= min && p.price <= max;
-          const matchesQuick =
-            !activeQuick || p.purpose === activeQuick || p.type === activeQuick;
-          return (
-            matchesQuery &&
-            matchesPurpose &&
-            matchesType &&
-            matchesLocation &&
-            matchesPrice &&
-            matchesQuick
-          );
-        });
+            resultsCount.textContent =
+              `${list.length} propert${list.length === 1 ? "y" : "ies"} found`;
 
-        if (els.sort.value === "price-asc")
-          list.sort((a, b) => a.price - b.price);
-        if (els.sort.value === "price-desc")
-          list.sort((a, b) => b.price - a.price);
+            if (list.length === 0) {
+              grid.innerHTML = `
+                <div class="empty-state">
+                  <b>No matches yet</b>
+                  Try widening your price range or clearing a filter.
+                </div>`;
+              return;
+            }
 
-        render(list);
-      }
+            grid.innerHTML = list.map(propertyCardHTML).join("");
+          }
 
-      [
-        els.search,
-        els.purpose,
-        els.type,
-        els.location,
-        els.min,
-        els.max,
-        els.sort,
-      ].forEach((el) => {
-        el.addEventListener("input", applyFilters);
-        el.addEventListener("change", applyFilters);
-      });
+          function applyFilters() {
+            const q = els.search.value.trim().toLowerCase();
+            const purpose = els.purpose.value;
+            const type = els.type.value;
+            const location = els.location.value;
+            const min = parseFloat(els.min.value) || 0;
+            const max = parseFloat(els.max.value) || Infinity;
 
-      els.chips.forEach((chip) => {
-        chip.addEventListener("click", () => {
-          els.chips.forEach((c) => c.classList.remove("active"));
-          chip.classList.add("active");
-          activeQuick = chip.dataset.quick;
+            let list = PROPERTIES.filter((p) => {
+              const matchesQuery =
+                !q ||
+                p.title.toLowerCase().includes(q) ||
+                p.location.toLowerCase().includes(q) ||
+                p.summary.toLowerCase().includes(q);
+
+              const matchesPurpose = !purpose || p.purpose === purpose;
+              const matchesType = !type || p.type === type;
+              const matchesLocation = !location || p.location === location;
+              const matchesPrice =
+                p.price === null ||
+                (p.price >= min && p.price <= max);
+
+              const matchesQuick =
+                !activeQuick ||
+                p.purpose === activeQuick ||
+                p.type === activeQuick;
+
+              return (
+                matchesQuery &&
+                matchesPurpose &&
+                matchesType &&
+                matchesLocation &&
+                matchesPrice &&
+                matchesQuick
+              );
+            });
+
+            if (els.sort.value === "price-asc") {
+              list.sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity));
+            }
+
+            if (els.sort.value === "price-desc") {
+              list.sort((a, b) => (b.price ?? -Infinity) - (a.price ?? -Infinity));
+            }
+
+            render(list);
+          }
+
+          [
+            els.search,
+            els.purpose,
+            els.type,
+            els.location,
+            els.min,
+            els.max,
+            els.sort,
+          ].forEach((el) => {
+            el.addEventListener("input", applyFilters);
+            el.addEventListener("change", applyFilters);
+          });
+
+          els.chips.forEach((chip) => {
+            chip.addEventListener("click", () => {
+              els.chips.forEach((c) => c.classList.remove("active"));
+              chip.classList.add("active");
+              activeQuick = chip.dataset.quick;
+              applyFilters();
+            });
+          });
+
+          els.reset.addEventListener("click", () => {
+            els.search.value = "";
+            els.purpose.value = "";
+            els.type.value = "";
+            els.location.value = "";
+            els.min.value = "";
+            els.max.value = "";
+            els.sort.value = "default";
+            activeQuick = "";
+
+            els.chips.forEach((c) => c.classList.remove("active"));
+
+            document
+              .querySelector('.chip[data-quick=""]')
+              .classList.add("active");
+
+            applyFilters();
+          });
+
+          // Prefill from homepage quick-search URL parameters.
+          const params = new URLSearchParams(window.location.search);
+
+          if (params.get("q")) els.search.value = params.get("q");
+          if (params.get("purpose")) els.purpose.value = params.get("purpose");
+          if (params.get("type")) els.type.value = params.get("type");
+          if (params.get("location")) els.location.value = params.get("location");
+
           applyFilters();
-        });
-      });
 
-      els.reset.addEventListener("click", () => {
-        els.search.value = "";
-        els.purpose.value = "";
-        els.type.value = "";
-        els.location.value = "";
-        els.min.value = "";
-        els.max.value = "";
-        els.sort.value = "default";
-        activeQuick = "";
-        els.chips.forEach((c) => c.classList.remove("active"));
-        document.querySelector('.chip[data-quick=""]').classList.add("active");
-        applyFilters();
-      });
-
-      // Prefill from URL params (?q=&purpose=&type=&location=) coming from the homepage quick search
-      (function prefillFromURL() {
-        const params = new URLSearchParams(window.location.search);
-        if (params.get("q")) els.search.value = params.get("q");
-        if (params.get("purpose")) els.purpose.value = params.get("purpose");
-        if (params.get("type")) els.type.value = params.get("type");
-        if (params.get("location")) els.location.value = params.get("location");
+        } catch (error) {
+          console.error("Could not load listings:", error);
+          resultsCount.textContent = "Unable to load properties";
+          grid.innerHTML = `
+            <div class="empty-state">
+              <b>Listings unavailable</b>
+              Please refresh the page. If the problem continues, contact us.
+            </div>`;
+        }
       })();
-
-      applyFilters();
     </script>
   </body>
 </html>

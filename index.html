@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -61,7 +62,10 @@
           Adamawa State, and growing.
         </p>
         <div class="hero-stats">
-          <div class="stat"><b id="verified-count">0</b><span>Verified Listings</span></div>
+          <div class="stat">
+            <b id="verified-count">...</b>
+            <span>Verified Listings</span>
+          </div>
           <div class="stat"><b>100%</b><span>Free to List</span></div>
           <div class="stat"><b>Yola</b><span>Adamawa State</span></div>
         </div>
@@ -139,7 +143,9 @@
         <h2>Featured Properties</h2>
         <span class="results-count">Handpicked, verified listings in Yola</span>
       </div>
-      <div class="grid" id="featured-grid"></div>
+      <div class="grid" id="featured-grid">
+        <p>Loading featured properties...</p>
+      </div>
       <div class="view-all-row">
         <a href="listings.html" class="cta-btn ghost">View All Listings →</a>
       </div>
@@ -242,48 +248,83 @@
       </div>
       <div class="foot-bottom">
         <span>We are NOT a government agency. We do NOT collect tax.</span>
-        <span
-          >© 2026 AbodeKing Homes &amp; Properties · Proudly based in Yola,
-          Adamawa State.</span
-        >
+        <span>
+          © 2026 AbodeKing Homes &amp; Properties · Proudly based in Yola,
+          Adamawa State.
+        </span>
       </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="common.js"></script>
+
     <script>
-      // Populate location dropdown
-      const qLocation = document.getElementById("q-location");
-      [...new Set(PROPERTIES.map((p) => p.location))].sort().forEach((loc) => {
-        const opt = document.createElement("option");
-        opt.value = loc;
-        opt.textContent = loc;
-        qLocation.appendChild(opt);
-      });
+      (async function () {
+        const qLocation = document.getElementById("q-location");
+        const featuredGrid = document.getElementById("featured-grid");
+        const verifiedCountElement =
+          document.getElementById("verified-count");
 
-      // Render 3 featured (verified) listings
-      const featuredGrid = document.getElementById("featured-grid");
-      const featured = PROPERTIES.filter((p) => p.verified).slice(0, 3);
-      featuredGrid.innerHTML = featured.map(propertyCardHTML).join("");
+        try {
+          // Wait until Supabase data is available.
+          await propertiesReady;
 
-      // Quick search sends the visitor to listings.html with query params
-      document.getElementById("q-go").addEventListener("click", () => {
-        const params = new URLSearchParams();
-        const search = document.getElementById("q-search").value.trim();
-        const purpose = document.getElementById("q-purpose").value;
-        const type = document.getElementById("q-type").value;
-        const location = qLocation.value;
-        if (search) params.set("q", search);
-        if (purpose) params.set("purpose", purpose);
-        if (type) params.set("type", type);
-        if (location) params.set("location", location);
-        window.location.href =
-          "listings.html" + (params.toString() ? "?" + params.toString() : "");
-      });
+          // Populate location dropdown.
+          [...new Set(PROPERTIES.map((p) => p.location))]
+            .filter(Boolean)
+            .sort()
+            .forEach((loc) => {
+              const opt = document.createElement("option");
+              opt.value = loc;
+              opt.textContent = loc;
+              qLocation.appendChild(opt);
+            });
+
+          // Render three featured verified listings.
+          const featured = PROPERTIES
+            .filter((p) => p.verified)
+            .slice(0, 3);
+
+          featuredGrid.innerHTML = featured.length
+            ? featured.map(propertyCardHTML).join("")
+            : '<div class="empty-state"><b>No featured properties yet</b>Please check back soon.</div>';
+
+          // Update verified listing count.
+          const count = PROPERTIES.filter((p) => p.verified).length;
+          verifiedCountElement.textContent = count.toLocaleString("en-NG");
+
+          // Quick search sends visitors to listings.html.
+          document.getElementById("q-go").addEventListener("click", () => {
+            const params = new URLSearchParams();
+
+            const search = document
+              .getElementById("q-search")
+              .value.trim();
+
+            const purpose = document.getElementById("q-purpose").value;
+            const type = document.getElementById("q-type").value;
+            const location = qLocation.value;
+
+            if (search) params.set("q", search);
+            if (purpose) params.set("purpose", purpose);
+            if (type) params.set("type", type);
+            if (location) params.set("location", location);
+
+            window.location.href =
+              "listings.html" +
+              (params.toString() ? "?" + params.toString() : "");
+          });
+
+        } catch (error) {
+          console.error("Homepage data loading failed:", error);
+          verifiedCountElement.textContent = "—";
+          featuredGrid.innerHTML = `
+            <div class="empty-state">
+              <b>Properties could not be loaded</b>
+              Please refresh the page and try again.
+            </div>`;
+        }
+      })();
     </script>
-  
-  <script>
-    const verifiedCount = PROPERTIES.filter((p) => p.verified).length;
-    document.getElementById("verified-count").textContent = verifiedCount;
-  </script>
-</body>
+  </body>
 </html>
