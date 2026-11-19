@@ -140,7 +140,7 @@
 
     <main class="results-wrap" id="featured">
       <div class="results-head">
-        <h2>Featured Properties</h2>
+        <h2>Featured Listings</h2>
         <span class="results-count">Handpicked, verified listings in Yola</span>
       </div>
       <div class="grid" id="featured-grid">
@@ -280,10 +280,10 @@
               qLocation.appendChild(opt);
             });
 
-          // Render three featured verified listings.
-          const featured = PROPERTIES
-            .filter((p) => p.verified)
-            .slice(0, 3);
+          const featuredIDs = [6, 838, 860, 834, 853, 7];
+          const featured = featuredIDs
+            .map(id => PROPERTIES.find(p => Number(p.id) === id))
+            .filter(Boolean);
 
           featuredGrid.innerHTML = featured.length
             ? featured.map(propertyCardHTML).join("")

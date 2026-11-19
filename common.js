@@ -17,12 +17,29 @@ const propertiesReady = (async function loadProperties() {
     "sb_publishable_eJHODFHVtOJ-ApJC_P26SA_U70AoPsd"
   );
 
-  const { data, error } = await db
-    .from("listings")
-    .select("*")
-    .eq("publish_status", "published")
-    .order("id", { ascending: true });
+  const PLACEHOLDER =
+  "https://drive.google.com/thumbnail?id=1PP2HzSSdoApNfFnE-dtWPST0hvm4t6t0&sz=w1200";
 
+const { data, error } = await db
+  .from("listings")
+  .select("*")
+  .eq("publish_status", "published")
+  .order("id", { ascending: true });
+
+if (data) {
+  data.sort((a, b) => {
+    const aPlaceholder = a.photo_exterior_1 === PLACEHOLDER;
+    const bPlaceholder = b.photo_exterior_1 === PLACEHOLDER;
+
+    const aNoPrice = a.price == null;
+    const bNoPrice = b.price == null;
+
+    const aGroup = (aPlaceholder ? 1 : 0) + (aNoPrice ? 2 : 0);
+    const bGroup = (bPlaceholder ? 1 : 0) + (bNoPrice ? 2 : 0);
+
+    return aGroup - bGroup || Number(a.id) - Number(b.id);
+  });
+}
   if (error) throw error;
 
   const privateFields = new Set([
